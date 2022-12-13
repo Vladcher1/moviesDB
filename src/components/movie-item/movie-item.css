@@ -50,3 +50,34 @@
   font-size: 12px;
   line-height: 22px;
 }
+
+.movie-card__header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.movie-card__average-rating {
+  width: 20px;
+  height: 20px;
+  padding: 8px;
+  border-radius: 30px;
+  border: black 2px solid;
+  text-align: center;
+  line-height: 22px;
+}
+
+.red-rating {
+  border-color: #e90000;
+}
+
+.orange-rating {
+  border-color: #e97e00;
+}
+
+.yellow-rating {
+  border-color: #e9d100;
+}
+
+.green-rating {
+  border-color: #66e900;
+}

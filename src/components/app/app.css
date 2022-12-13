@@ -1,6 +1,11 @@
+html,
 body {
   background-color: #e5e5e5;
   font-family: "Inter", sans-serif;
+  height: 100%;
+}
+#root {
+  height: inherit;
 }
 
 .movies-container {
@@ -13,4 +18,19 @@ body {
   flex-direction: row;
   flex-wrap: wrap;
   gap: 35px;
+}
+
+.body-container {
+  width: 1010px;
+  height: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+.not-found {
+  width: 500px;
+  font-size: 30px;
+  margin: 0 auto;
+  background-color: #ffffff;
 }

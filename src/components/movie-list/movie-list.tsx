@@ -29,14 +29,7 @@ const MovieList = function movieList({ data }: any) {
       />
     );
   });
-  // if (movies.length !== 0) {
   return <ul className="movies-container">{movies}</ul>;
-  // }
-  // return (
-  //   <div className="movies-container">
-  //     Sorry, there are no films with this name
-  //   </div>
-  // );
 };
 
 export default MovieList;

@@ -1,9 +1,10 @@
 import "./header.css";
 
-function Header({ toggleSearch }) {
+function Header({ toggleSearch }: any) {
   return (
     <div className="header">
       <button
+        type="button"
         className="header-button button-search"
         onClick={() => toggleSearch("search")}
       >
@@ -11,6 +12,7 @@ function Header({ toggleSearch }) {
       </button>
       <button
         className="header-button button-rated"
+        type="button"
         onClick={() => toggleSearch("rated")}
       >
         Rated

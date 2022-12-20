@@ -4,21 +4,8 @@ import "./search-input.css";
 import debounce from "lodash.debounce";
 
 export default class SearchInput extends React.Component<any, any> {
-  // state = {
-  //   value: "",
-  // };
-
-  // componentDidUpdate() {
-  // console.log("updated", this.state);
-  // const { value }: any = this.state;
-  // const { getMovie }: any = this.props;
-  // const cb = getMovie;
-  // return cb(value);
-  // if (value !== "") getMovie(value);
-  // }
 
   onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // this.setState({ value: e.target.value });
     const { getValue } = this.props;
     getValue(e.target.value);
   };
@@ -27,7 +14,7 @@ export default class SearchInput extends React.Component<any, any> {
 
   render() {
     return (
-      <form>
+      <form className="form">
         <Input
           onChange={this.onInputDebounce}
           placeholder="Type to search..."

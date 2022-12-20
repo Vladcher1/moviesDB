@@ -11,14 +11,17 @@ import NetworkState from "../network-state/network-state";
 import Pagination from "../pagination/pagination";
 import SearchInput from "../search-input/search-input";
 import Header from "../header/header";
-import { MoviesProvider } from "../../servises/data-context";
+import { MovieContextProvider } from "../../servises/data-context";
 import Rated from "../rated/rated";
 
 export default class App extends React.Component<any, any> {
   movieServise = new MovieDB();
 
+  genresArray = undefined;
+
   state: IState = {
     data: [],
+    ratedMovies: [],
     loading: false,
     error: false,
     network: true,
@@ -29,6 +32,12 @@ export default class App extends React.Component<any, any> {
     isSearch: true,
   };
 
+  componentDidMount() {
+    this.movieServise.getGenres().then((genres) => {
+      this.genresArray = genres;
+    });
+  }
+
   componentDidUpdate(prevProps: any, prevState: Readonly<any>): void {
     const { value, page } = this.state;
     if (value === "") {
@@ -36,12 +45,10 @@ export default class App extends React.Component<any, any> {
     }
     if (value !== prevState.value || page !== prevState.page) {
       this.setState({ loading: true, notFound: false });
-      this.movieServise.getGenres().then((genres) => console.log(genres));
       this.movieServise
         .getResourse(value, page)
         .then((body: any) => {
           const { results } = body;
-          console.log(results);
           if (results.length === 0) {
             this.setState({
               notFound: true,
@@ -50,9 +57,10 @@ export default class App extends React.Component<any, any> {
               data: [],
             });
           } else {
-            const moviesArr = results.map((movie: any) =>
-              this.createMovie(movie)
-            );
+            const moviesArr = results.map((movie: any) => {
+              const newMovie = this.createMovie(movie);
+              return newMovie;
+            });
             this.setState({
               data: moviesArr,
               loading: false,
@@ -72,6 +80,7 @@ export default class App extends React.Component<any, any> {
       loading: false,
       notFound: false,
     });
+    console.log(error);
   };
 
   onNetworkState = () => {
@@ -90,7 +99,7 @@ export default class App extends React.Component<any, any> {
     for (const letter of text) {
       counter++;
       res += letter;
-      if (counter >= 150 && letter === " ") {
+      if (counter >= 100 && letter === " ") {
         break;
       }
     }
@@ -110,6 +119,13 @@ export default class App extends React.Component<any, any> {
 
   toggleSearch = (button: string) => {
     if (button !== "search") {
+      let newData;
+
+      this.movieServise.getRated().then((rated) => {
+        newData = rated;
+        this.ratedInState(newData);
+      });
+
       this.setState({
         isSearch: false,
       });
@@ -120,9 +136,23 @@ export default class App extends React.Component<any, any> {
     }
   };
 
+  ratedInState = (newData: any) => {
+    const ratedList = newData.map((movieRated: any) => {
+      const ratedMovie = this.createMovie(movieRated);
+      return ratedMovie;
+    });
+
+    const { ratedMovies } = this.state;
+    this.setState({
+      ratedMovies: ratedList,
+    });
+  };
+
   createMovie(movie: any) {
     const releaseDate = movie.release_date;
-    format(new Date(movie.release_date), "MMMM dd, yyyy");
+    if (movie.release_date !== "") {
+      format(new Date(movie.release_date), "MMMM dd, yyyy");
+    }
     return {
       id: movie.id,
       title: movie.title,
@@ -130,7 +160,7 @@ export default class App extends React.Component<any, any> {
       releaseDate,
       posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
       cutInfo: this.cutInfo(movie.overview),
-      genreIds: movie.genre_ids,
+      genreIds: Array.from(movie.genre_ids),
       rating: [false, 0],
       averageRating: movie.vote_average,
     };
@@ -147,11 +177,12 @@ export default class App extends React.Component<any, any> {
       page,
       totalPages,
       isSearch,
-      averageRating,
+      ratedMovies,
     } = this.state;
 
     const hasData = !loading && !error && value !== "";
-    const movieList = hasData ? <MovieList data={data} value={value} /> : null;
+    const movieList =
+      hasData && isSearch ? <MovieList data={data} value={value} /> : null;
     const spinner = loading ? <Spinner /> : null;
     const errorMessage = error ? <ErrorMessage network={network} /> : null;
     const noNetwork = !network ? <ErrorMessage network={network} /> : null;
@@ -160,27 +191,30 @@ export default class App extends React.Component<any, any> {
         <span>Sorry, no films "{value}" are found :(</span>
       </div>
     ) : null;
-    const rated = !isSearch ? <Rated /> : null;
+    const rated = !isSearch ? (
+      <Rated ratedMovies={ratedMovies} ratedInState={this.ratedInState} />
+    ) : null;
+    // const genresArray = MovieContextProvider;
     return (
       <div className="body-container">
-        <MoviesProvider value={this.movieServise}>
-          {rated}
+        <MovieContextProvider value={this.genresArray}>
           <NetworkState onNetworkState={this.onNetworkState} />
           {!error ? <Header toggleSearch={this.toggleSearch} /> : null}
+          {rated}
           {!error && isSearch ? <SearchInput getValue={this.getValue} /> : null}
           {noNetwork}
           {movieList}
           {notFoundMovies}
           {spinner}
           {errorMessage}
-          {hasData && !notFound ? (
+          {hasData && !notFound && !rated ? (
             <Pagination
               page={page}
               nextPage={this.nextPage}
               totalPages={totalPages}
             />
           ) : null}
-        </MoviesProvider>
+        </MovieContextProvider>
       </div>
     );
   }

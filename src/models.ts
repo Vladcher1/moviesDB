@@ -18,4 +18,5 @@ export interface IState {
   notFound: boolean;
   totalPages: number;
   isSearch: boolean;
+  ratedMovies: IMovie[];
 }

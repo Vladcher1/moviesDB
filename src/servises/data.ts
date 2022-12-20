@@ -10,47 +10,9 @@ const guestSessionId = "aaacf62bea4be71fa47cf297cab21966";
 //  https://api.themoviedb.org/3/search/company?api_key=7cbde8d63dac4aeccc5252cbbcef7c4c&query=return&page=1
 export default class MovieDB {
   async createGuestSession() {
-    // const cteareToken = await fetch(
-    //   `https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}`
-    // );
-    // const requestToken = await cteareToken.json();
-    // console.log(requestToken.request_token);
-    // const guestToken = requestToken.request_token;
-    // const guestSessionId =
-    // const askingPermission = await fetch(
-    //   `https://www.themoviedb.org/authenticate/${requestToken.request_token}`
-    // );
-
     const createSession = await fetch(
       `https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${apiKey}`
     );
-    // const guestSession = await createSession.json();
-    // const guestSessionId = guestSession.guest_session_id;
-    // console.log("ID", guestSessionId);
-
-    // const rate = await fetch(
-    //   `https://api.themoviedb.org/3/movie/1/rating?api_key=${apiKey}&guest_session_id=${guestSessionId}`,
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify({ value: 8.5 }),
-    //   }
-    // );
-
-    // const rateJson = await rate.json();
-    // console.log(rateJson);
-    // return rateJson;
-    // return askingPermission;
-    // const auntefication = await fetch(
-    //   `https://api.themoviedb.org/3/authentication/session/new?api_key=${apiKey}`,
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       request_token: `${requestToken.request_token}`,
-    //     }),
-    //   }
-    // );
-
-    // return auntefication;
   }
 
   async getRated() {
@@ -72,13 +34,11 @@ export default class MovieDB {
     );
 
     const rateJson = await rate.json();
-    // console.log(rateJson);
     return rateJson;
   }
 
   async getResourse(value: string, page = 1) {
     const response = await fetch(
-      // `${url}${apiKey}&language=en-US&query=${value}&page=${page}&include_adult=false`
       `${url}${apiKey}&language=en-US&query=${value}&page=${page}&include_adult=false`
     );
 
@@ -89,7 +49,6 @@ export default class MovieDB {
     }
 
     const body = await response.json();
-    // return body.results;
     return body;
   }
 

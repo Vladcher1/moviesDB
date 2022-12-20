@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 
-import { IState } from "../../models";
+import { IMovie, IState } from "../../models";
 import "./app.css";
 import MovieList from "../movie-list/movie-list";
 import MovieDB from "../../servises/data";
@@ -57,7 +57,7 @@ export default class App extends React.Component<any, any> {
               data: [],
             });
           } else {
-            const moviesArr = results.map((movie: any) => {
+            const moviesArr = results.map((movie: IMovie) => {
               const newMovie = this.createMovie(movie);
               return newMovie;
             });
@@ -111,7 +111,7 @@ export default class App extends React.Component<any, any> {
     this.setState({ value: valueC });
   };
 
-  nextPage = (page: any) => {
+  nextPage = (page: number) => {
     this.setState({
       page,
     });

@@ -1,9 +1,9 @@
 import React from "react";
 
 import MovieItem from "../movie-item/movie-item";
-import { IMovie } from "../../models";
+import { IMovie, IState } from "../../models";
 
-const MovieList = function movieList({ data }: any) {
+const MovieList = function movieList({ data }: IState) {
   const movies = data.map((movie: IMovie) => {
     const {
       id,

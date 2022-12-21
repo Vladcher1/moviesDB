@@ -14,13 +14,15 @@ function Header({ toggleSearch, isSearch }: any) {
       <button
         type="button"
         className={classNamesSearch}
-        onClick={() => toggleSearch("search")}>
+        onClick={() => toggleSearch("search")}
+      >
         Search
       </button>
       <button
         className={ClassNamesRated}
         type="button"
-        onClick={() => toggleSearch("rated")}>
+        onClick={() => toggleSearch("rated")}
+      >
         Rated
       </button>
     </div>

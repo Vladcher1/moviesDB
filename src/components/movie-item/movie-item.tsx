@@ -51,6 +51,7 @@ const MovieItem = function movieItem({
               );
             }
           }
+          return "";
         });
 
         return (

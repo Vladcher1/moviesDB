@@ -15,6 +15,22 @@ import { MovieContextProvider } from "../../servises/data-context";
 import Rated from "../rated/rated";
 
 export default class App extends React.Component<any, any> {
+  static cutInfo = (text: string) => {
+    let counter = 0;
+    let res = "";
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const letter of text) {
+      counter++;
+      res += letter;
+      if (counter >= 100 && letter === " ") {
+        break;
+      }
+    }
+    res += "...";
+    return res;
+  };
+
   movieServise = new MovieDB();
 
   genresArray = undefined;
@@ -74,13 +90,12 @@ export default class App extends React.Component<any, any> {
     }
   }
 
-  onError = (error: Error) => {
+  onError = () => {
     this.setState({
       error: true,
       loading: false,
       notFound: false,
     });
-    console.log(error);
   };
 
   onNetworkState: Function = () => {
@@ -89,22 +104,6 @@ export default class App extends React.Component<any, any> {
       loading: false,
       notFound: false,
     }));
-  };
-
-  cutInfo = (text: string) => {
-    let counter = 0;
-    let res = "";
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const letter of text) {
-      counter++;
-      res += letter;
-      if (counter >= 100 && letter === " ") {
-        break;
-      }
-    }
-    res += "...";
-    return res;
   };
 
   getValue = (valueC: string) => {

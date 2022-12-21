@@ -24,6 +24,7 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier", "import"],
   "rules": {
+    "operator-linebreak": ["error", "after"],
     "no-plusplus": "off",
     "object-curly-newline": "off",
     "comma-dangle": "off",

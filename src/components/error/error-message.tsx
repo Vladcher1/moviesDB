@@ -1,7 +1,11 @@
 import React from "react";
 import { Alert, Button, Space } from "antd";
 
-const ErrorMessage: React.FC = function errorMessage({ network }: any) {
+import { IState } from "../../models";
+
+const ErrorMessage: React.FC = function errorMessage({
+  network,
+}: Pick<IState, "network">) {
   let errorDescription;
   if (!network) {
     errorDescription = "Please, check Your Internet connection";

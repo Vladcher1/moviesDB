@@ -1,8 +1,8 @@
 import React from "react";
 import { Rate } from "antd";
 import "./rate-stars.css";
-import { idText } from "typescript";
 
+// eslint-disable-next-line react/function-component-definition
 const RateStars: React.FC = ({ getRatingValue, id }: any) => {
   const storageValue = localStorage.getItem(`${id}`);
   const showRatingValue = storageValue || 0;

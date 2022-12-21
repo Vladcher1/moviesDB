@@ -1,10 +1,3 @@
-// import React from "react";
-// import { Spin } from "antd";
-
-// const Spinner: React.FC = () => <Spin />;
-
-// export default Spinner;
-
 import React from "react";
 import { Space, Spin } from "antd";
 import "./spinner.css";

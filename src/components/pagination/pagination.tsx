@@ -1,13 +1,19 @@
 import React from "react";
 import { Pagination } from "antd";
-import "./pagination.css";
 
-const App: React.FC = function pagination({ nextPage, page, totalPages }: any) {
+import "./pagination.css";
+import { IState } from "../../models";
+
+const App: React.FC = function pagination({
+  nextPage,
+  page,
+  totalPages,
+}: Pick<IState, "page" | "totalPages">) {
   return (
     <Pagination
       defaultCurrent={1}
       current={page}
-      onChange={(page) => nextPage(page)}
+      onChange={(pageCurrent) => nextPage(pageCurrent)}
       total={totalPages}
     />
   );

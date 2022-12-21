@@ -31,7 +31,7 @@ const MovieItem = function movieItem({
 
   const movieServise = new MovieDB();
 
-  const getRatingValue = (value: any) => {
+  const getRatingValue = (value: number) => {
     movieServise.rate(id, value);
     localStorage.setItem(`${id}`, `${value}`);
   };
@@ -39,9 +39,10 @@ const MovieItem = function movieItem({
   return (
     <MovieContextConsumer>
       {(genresArray) => {
+        const { genres }: any = genresArray;
         const genreSpans = Array.from(genreIds).map((movieGenre: any) => {
           // eslint-disable-next-line no-restricted-syntax
-          for (const obj of genresArray.genres) {
+          for (const obj of genres) {
             if (movieGenre === obj.id) {
               return (
                 <span key={movieGenre} className="movie-card__category">

@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 
-import { IMovie, IState } from "../../models";
+import { IMovie, IState, IMovieFromServer } from "../../models";
 import "./app.css";
 import MovieList from "../movie-list/movie-list";
 import MovieDB from "../../servises/data";
@@ -74,7 +74,7 @@ export default class App extends React.Component<any, any> {
     }
   }
 
-  onError = (error: any) => {
+  onError = (error: Error) => {
     this.setState({
       error: true,
       loading: false,
@@ -83,8 +83,8 @@ export default class App extends React.Component<any, any> {
     console.log(error);
   };
 
-  onNetworkState = () => {
-    this.setState(({ network }: any) => ({
+  onNetworkState: Function = () => {
+    this.setState(({ network }: Pick<IState, "network">) => ({
       network: !network,
       loading: false,
       notFound: false,
@@ -119,11 +119,8 @@ export default class App extends React.Component<any, any> {
 
   toggleSearch = (button: string) => {
     if (button !== "search") {
-      let newData;
-
-      this.movieServise.getRated().then((rated) => {
-        newData = rated;
-        this.ratedInState(newData);
+      this.movieServise.getRated().then((rated: IMovie[]) => {
+        this.ratedInState(rated);
       });
 
       this.setState({
@@ -136,19 +133,17 @@ export default class App extends React.Component<any, any> {
     }
   };
 
-  ratedInState = (newData: any) => {
+  ratedInState = (newData: IMovie[]) => {
     const ratedList = newData.map((movieRated: any) => {
       const ratedMovie = this.createMovie(movieRated);
       return ratedMovie;
     });
-
-    const { ratedMovies } = this.state;
     this.setState({
       ratedMovies: ratedList,
     });
   };
 
-  createMovie(movie: any) {
+  createMovie(movie: IMovieFromServer) {
     const releaseDate = movie.release_date;
     if (movie.release_date !== "") {
       format(new Date(movie.release_date), "MMMM dd, yyyy");
@@ -188,18 +183,19 @@ export default class App extends React.Component<any, any> {
     const noNetwork = !network ? <ErrorMessage network={network} /> : null;
     const notFoundMovies = notFound ? (
       <div className="not-found">
-        <span>Sorry, no films "{value}" are found :(</span>
+        <span>Sorry, no films &quot;{value}&quot; are found :(</span>
       </div>
     ) : null;
     const rated = !isSearch ? (
       <Rated ratedMovies={ratedMovies} ratedInState={this.ratedInState} />
     ) : null;
-    // const genresArray = MovieContextProvider;
     return (
       <div className="body-container">
         <MovieContextProvider value={this.genresArray}>
           <NetworkState onNetworkState={this.onNetworkState} />
-          {!error ? <Header toggleSearch={this.toggleSearch} /> : null}
+          {!error ? (
+            <Header toggleSearch={this.toggleSearch} isSearch={isSearch} />
+          ) : null}
           {rated}
           {!error && isSearch ? <SearchInput getValue={this.getValue} /> : null}
           {noNetwork}

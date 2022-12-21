@@ -1,6 +1,6 @@
 .movie-card {
   width: 454px;
-  height: 281px;
+  height: 300px;
   box-shadow: 2px 3px 15px 5px #e5e5e5;
   display: flex;
   cursor: pointer;
@@ -13,11 +13,14 @@
 
 .movie-card__image {
   width: 183px;
-  height: 281px;
+  height: 300px;
 }
 
 .movie-card__body {
-  padding: 10px 20px;
+  padding: 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .movie-card__title {
@@ -36,10 +39,9 @@
 
 .movie-card__categories {
   display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
-
 
 .movie-card__category {
   background-color: #ffffff;
@@ -69,8 +71,8 @@
   padding: 8px;
   border-radius: 30px;
   border: black 2px solid;
-  text-align: center;
-  line-height: 22px;
+  justify-content: center;
+  display: flex;
 }
 
 .red-rating {

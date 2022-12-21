@@ -1,18 +1,16 @@
-// import React from "react";
-
-import { type } from "os";
+// import { type } from "os";
 
 const url = "https://api.themoviedb.org/3/search/movie?api_key=";
 const apiKey = "7cbde8d63dac4aeccc5252cbbcef7c4c";
 const imgUrl = "https://api.themoviedb.org/3/configuration?api_key=";
 const genreUrl = "https://api.themoviedb.org/3/genre/movie/list?api_key=";
 const guestSessionId = "aaacf62bea4be71fa47cf297cab21966";
-//  https://api.themoviedb.org/3/search/company?api_key=7cbde8d63dac4aeccc5252cbbcef7c4c&query=return&page=1
 export default class MovieDB {
   async createGuestSession() {
     const createSession = await fetch(
       `https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${apiKey}`
     );
+    return createSession;
   }
 
   async getRated() {

@@ -63,7 +63,7 @@ export default class MovieDB {
     return `${imageBody.base_url}w500`;
   }
 
-  static async getGenres() {
+  async getGenres() {
     const genresResponse = await fetch(`${genreUrl}${apiKey}&language=en-US`);
 
     if (!genresResponse.ok) {

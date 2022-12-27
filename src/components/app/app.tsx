@@ -15,22 +15,6 @@ import { MovieContextProvider } from "../../servises/data-context";
 import Rated from "../rated/rated";
 
 export default class App extends React.Component<any, any> {
-  static cutInfo = (text: string) => {
-    let counter = 0;
-    let res = "";
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const letter of text) {
-      counter++;
-      res += letter;
-      if (counter >= 100 && letter === " ") {
-        break;
-      }
-    }
-    res += "...";
-    return res;
-  };
-
   movieServise = new MovieDB();
 
   genresArray = undefined;
@@ -73,7 +57,7 @@ export default class App extends React.Component<any, any> {
               data: [],
             });
           } else {
-            const moviesArr = results.map((movie: IMovie) => {
+            const moviesArr = results.map((movie: any) => {
               const newMovie = this.createMovie(movie);
               return newMovie;
             });
@@ -86,9 +70,25 @@ export default class App extends React.Component<any, any> {
             });
           }
         })
-        .catch((error) => this.onError(error));
+        .catch(() => this.onError());
     }
   }
+
+  cutInfo = (text: string) => {
+    let counter = 0;
+    let res = "";
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const letter of text) {
+      counter++;
+      res += letter;
+      if (counter >= 100 && letter === " ") {
+        break;
+      }
+    }
+    res += "...";
+    return res;
+  };
 
   onError = () => {
     this.setState({
@@ -176,7 +176,12 @@ export default class App extends React.Component<any, any> {
 
     const hasData = !loading && !error && value !== "";
     const movieList =
-      hasData && isSearch ? <MovieList data={data} value={value} /> : null;
+      hasData && isSearch ? (
+        <MovieList
+          data={data}
+          // value={value}
+        />
+      ) : null;
     const spinner = loading ? <Spinner /> : null;
     const errorMessage = error ? <ErrorMessage network={network} /> : null;
     const noNetwork = !network ? <ErrorMessage network={network} /> : null;
@@ -185,9 +190,7 @@ export default class App extends React.Component<any, any> {
         <span>Sorry, no films &quot;{value}&quot; are found :(</span>
       </div>
     ) : null;
-    const rated = !isSearch ? (
-      <Rated ratedMovies={ratedMovies} ratedInState={this.ratedInState} />
-    ) : null;
+    const rated = !isSearch ? <Rated ratedMovies={ratedMovies} /> : null;
     return (
       <div className="body-container">
         <MovieContextProvider value={this.genresArray}>

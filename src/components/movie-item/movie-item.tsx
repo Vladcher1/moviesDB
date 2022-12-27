@@ -32,13 +32,13 @@ const MovieItem = function movieItem({
   const movieServise = new MovieDB();
 
   const getRatingValue = (value: number) => {
-    movieServise.rate(id, value);
+    movieServise.rate(id || 0, value);
     localStorage.setItem(`${id}`, `${value}`);
   };
 
   return (
     <MovieContextConsumer>
-      {(genresArray) => {
+      {(genresArray: any) => {
         const { genres }: any = genresArray;
         const genreSpans = Array.from(genreIds).map((movieGenre: any) => {
           // eslint-disable-next-line no-restricted-syntax

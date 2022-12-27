@@ -1,6 +1,6 @@
 // import React from "react";
 
-const NetworkState = function NetworkState({ onNetworkState }: any) {
+const NetworkState = function NetworkState({ onNetworkState }: any): any {
   window.onoffline = () => {
     onNetworkState();
   };

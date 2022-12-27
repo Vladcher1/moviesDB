@@ -2,13 +2,8 @@ import React from "react";
 import { Pagination } from "antd";
 
 import "./pagination.css";
-import { IState } from "../../models";
 
-const App: React.FC = function pagination({
-  nextPage,
-  page,
-  totalPages,
-}: Pick<IState, "page" | "totalPages">) {
+const App = function pagination({ nextPage, page, totalPages }: any) {
   return (
     <Pagination
       defaultCurrent={1}

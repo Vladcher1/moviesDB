@@ -6,14 +6,14 @@ const imgUrl = "https://api.themoviedb.org/3/configuration?api_key=";
 const genreUrl = "https://api.themoviedb.org/3/genre/movie/list?api_key=";
 const guestSessionId = "aaacf62bea4be71fa47cf297cab21966";
 export default class MovieDB {
-  static async createGuestSession() {
+  async createGuestSession() {
     const createSession = await fetch(
       `https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${apiKey}`
     );
     return createSession;
   }
 
-  static async getRated() {
+  async getRated() {
     const ratedRequest = await fetch(
       `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&sort_by=created_at.asc`
     );
@@ -21,7 +21,7 @@ export default class MovieDB {
     return rated.results;
   }
 
-  static async rate(id: number, valueRate: number) {
+  async rate(id: number, valueRate: number) {
     const rate = await fetch(
       `https://api.themoviedb.org/3/movie/${id}/rating?api_key=${apiKey}&guest_session_id=${guestSessionId}`,
       {
@@ -35,7 +35,7 @@ export default class MovieDB {
     return rateJson;
   }
 
-  static async getResourse(value: string, page = 1) {
+  async getResourse(value: string, page = 1) {
     const response = await fetch(
       `${url}${apiKey}&language=en-US&query=${value}&page=${page}&include_adult=false`
     );
@@ -50,7 +50,7 @@ export default class MovieDB {
     return body;
   }
 
-  static async getImage() {
+  async getImage() {
     const imageResponse = await fetch(`${imgUrl}${apiKey}`);
 
     if (!imageResponse.ok) {
@@ -63,7 +63,7 @@ export default class MovieDB {
     return `${imageBody.base_url}w500`;
   }
 
-  static async getGenres() {
+  async getGenres() {
     const genresResponse = await fetch(`${genreUrl}${apiKey}&language=en-US`);
 
     if (!genresResponse.ok) {

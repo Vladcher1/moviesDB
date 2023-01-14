@@ -77,8 +77,7 @@ export default class App extends React.Component<any, any> {
       this.setState({ loading: true, notFound: false });
       this.movieServise
         .getResourse(value, page)
-        .then((body: any) => {
-          const { results } = body;
+        .then(({ results, total_pages: totalPages }: any) => {
           if (results.length === 0) {
             this.setState({
               notFound: true,
@@ -87,16 +86,15 @@ export default class App extends React.Component<any, any> {
               data: [],
             });
           } else {
-            const moviesArr = results.map((movie: any) => {
-              const newMovie = this.createMovie(movie);
-              return newMovie;
-            });
+            const moviesArr = results.map((movie: any) =>
+              this.createMovie(movie)
+            );
             this.setState({
               data: moviesArr,
               loading: false,
               error: false,
               notFound: false,
-              totalPages: body.total_pages,
+              totalPages,
             });
           }
         })

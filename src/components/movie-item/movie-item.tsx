@@ -41,7 +41,6 @@ const MovieItem = function movieItem({
       {(genresArray: any) => {
         const { genres }: any = genresArray;
         const genreSpans = Array.from(genreIds).map((movieGenre: any) => {
-          // eslint-disable-next-line no-restricted-syntax
           for (const obj of genres) {
             if (movieGenre === obj.id) {
               return (

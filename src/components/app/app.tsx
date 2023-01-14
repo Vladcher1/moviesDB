@@ -185,42 +185,36 @@ export default class App extends React.Component<any, any> {
     } = this.state;
 
     const hasData = !loading && !error && value !== "";
-    const movieList =
-      hasData && isSearch ? (
-        <MovieList
-          data={data}
-          // value={value}
-        />
-      ) : null;
-    const spinner = loading ? <Spinner /> : null;
-    const errorMessage = error ? <ErrorMessage network={network} /> : null;
-    const noNetwork = !network ? <ErrorMessage network={network} /> : null;
-    const notFoundMovies = notFound ? (
+    const movieList = hasData && isSearch && <MovieList data={data} />;
+    const spinner = loading && <Spinner />;
+    const errorMessage = error && <ErrorMessage network={network} />;
+    const noNetwork = !network && <ErrorMessage network={network} />;
+    const notFoundMovies = notFound && (
       <div className="not-found">
         <span>Sorry, no films &quot;{value}&quot; are found :(</span>
       </div>
-    ) : null;
-    const rated = !isSearch ? <Rated ratedMovies={ratedMovies} /> : null;
+    );
+    const rated = !isSearch && <Rated ratedMovies={ratedMovies} />;
     return (
       <div className="body-container">
         <MovieContextProvider value={this.genresArray}>
-          {!error ? (
+          {!error && (
             <Header toggleSearch={this.toggleSearch} isSearch={isSearch} />
-          ) : null}
+          )}
           {rated}
-          {!error && isSearch ? <SearchInput getValue={this.getValue} /> : null}
+          {!error && isSearch && <SearchInput getValue={this.getValue} />}
           {noNetwork}
           {movieList}
           {notFoundMovies}
           {spinner}
           {errorMessage}
-          {hasData && !notFound && !rated ? (
+          {hasData && !notFound && !rated && (
             <Pagination
               page={page}
               nextPage={this.nextPage}
               totalPages={totalPages}
             />
-          ) : null}
+          )}
         </MovieContextProvider>
       </div>
     );

@@ -17,7 +17,6 @@ const ErrorMessage: React.FC<any> = function errorMessage({ network }: any) {
         description={errorDescription}
         type="error"
         action={
-          // eslint-disable-next-line react/jsx-wrap-multilines
           <Button size="small" danger>
             Detail
           </Button>

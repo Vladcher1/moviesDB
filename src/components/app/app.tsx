@@ -110,8 +110,8 @@ export default class App extends React.Component<any, any> {
     });
   };
 
-  getValue = (valueC: string) => {
-    this.setState({ value: valueC });
+  getValue = (value: string) => {
+    this.setState({ value });
   };
 
   nextPage = (page: number) => {
@@ -137,30 +137,36 @@ export default class App extends React.Component<any, any> {
   };
 
   ratedInState = (newData: IMovie[]) => {
-    const ratedList = newData.map((movieRated: any) => {
-      const ratedMovie = this.createMovie(movieRated);
-      return ratedMovie;
-    });
+    const ratedList = newData.map((movieRated: any) =>
+      this.createMovie(movieRated)
+    );
     this.setState({
       ratedMovies: ratedList,
     });
   };
 
-  createMovie(movie: IMovieFromServer) {
-    const releaseDate = movie.release_date;
-    if (movie.release_date !== "") {
-      format(new Date(movie.release_date), "MMMM dd, yyyy");
+  createMovie({
+    release_date: releaseDate,
+    id,
+    title,
+    overview,
+    poster_path: posterPath,
+    genre_ids: genreIds,
+    vote_average: averageRating,
+  }: IMovieFromServer) {
+    if (releaseDate !== "") {
+      format(new Date(releaseDate), "MMMM dd, yyyy");
     }
     return {
-      id: movie.id,
-      title: movie.title,
-      info: movie.overview,
+      id,
+      title,
+      info: overview,
       releaseDate,
-      posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-      cutInfo: cutInfo(movie.overview),
-      genreIds: Array.from(movie.genre_ids),
+      posterPath: `https://image.tmdb.org/t/p/w500${posterPath}`,
+      cutInfo: cutInfo(overview),
+      genreIds: Array.from(genreIds),
       rating: [false, 0],
-      averageRating: movie.vote_average,
+      averageRating,
     };
   }
 

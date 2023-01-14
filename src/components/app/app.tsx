@@ -7,7 +7,6 @@ import MovieList from "../movie-list/movie-list";
 import MovieDB from "../../servises/data";
 import Spinner from "../spinner/spinner";
 import ErrorMessage from "../error/error-message";
-import NetworkState from "../network-state/network-state";
 import Pagination from "../pagination/pagination";
 import SearchInput from "../search-input/search-input";
 import Header from "../header/header";
@@ -36,6 +35,13 @@ export default class App extends React.Component<any, any> {
     this.movieServise.getGenres().then((genres) => {
       this.genresArray = genres;
     });
+
+    window.onoffline = () => {
+      this.onNetworkState();
+    };
+    window.ononline = () => {
+      this.onNetworkState();
+    };
   }
 
   componentDidUpdate(prevProps: any, prevState: Readonly<any>): void {
@@ -44,6 +50,13 @@ export default class App extends React.Component<any, any> {
       return;
     }
     if (value !== prevState.value || page !== prevState.page) {
+      window.onoffline = () => {
+        this.onNetworkState();
+      };
+      window.ononline = () => {
+        this.onNetworkState();
+      };
+
       this.setState({ loading: true, notFound: false });
       this.movieServise
         .getResourse(value, page)
@@ -194,7 +207,6 @@ export default class App extends React.Component<any, any> {
     return (
       <div className="body-container">
         <MovieContextProvider value={this.genresArray}>
-          <NetworkState onNetworkState={this.onNetworkState} />
           {!error ? (
             <Header toggleSearch={this.toggleSearch} isSearch={isSearch} />
           ) : null}

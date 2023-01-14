@@ -38,10 +38,18 @@ export default class App extends React.Component<any, any> {
     });
 
     window.onoffline = () => {
-      this.onNetworkState();
+      this.setState(({ network }: Pick<IState, "network">) => ({
+        network: !network,
+        loading: false,
+        notFound: false,
+      }));
     };
     window.ononline = () => {
-      this.onNetworkState();
+      this.setState(({ network }: Pick<IState, "network">) => ({
+        network: !network,
+        loading: false,
+        notFound: false,
+      }));
     };
   }
 
@@ -52,10 +60,18 @@ export default class App extends React.Component<any, any> {
     }
     if (value !== prevState.value || page !== prevState.page) {
       window.onoffline = () => {
-        this.onNetworkState();
+        this.setState(({ network }: Pick<IState, "network">) => ({
+          network: !network,
+          loading: false,
+          notFound: false,
+        }));
       };
       window.ononline = () => {
-        this.onNetworkState();
+        this.setState(({ network }: Pick<IState, "network">) => ({
+          network: !network,
+          loading: false,
+          notFound: false,
+        }));
       };
 
       this.setState({ loading: true, notFound: false });
@@ -94,14 +110,6 @@ export default class App extends React.Component<any, any> {
       loading: false,
       notFound: false,
     });
-  };
-
-  onNetworkState: Function = () => {
-    this.setState(({ network }: Pick<IState, "network">) => ({
-      network: !network,
-      loading: false,
-      notFound: false,
-    }));
   };
 
   getValue = (valueC: string) => {

@@ -12,6 +12,7 @@ import SearchInput from "../search-input/search-input";
 import Header from "../header/header";
 import { MovieContextProvider } from "../../servises/data-context";
 import Rated from "../rated/rated";
+import { cutInfo } from "../../utilities";
 
 export default class App extends React.Component<any, any> {
   movieServise = new MovieDB();
@@ -87,22 +88,6 @@ export default class App extends React.Component<any, any> {
     }
   }
 
-  cutInfo = (text: string) => {
-    let counter = 0;
-    let res = "";
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const letter of text) {
-      counter++;
-      res += letter;
-      if (counter >= 100 && letter === " ") {
-        break;
-      }
-    }
-    res += "...";
-    return res;
-  };
-
   onError = () => {
     this.setState({
       error: true,
@@ -166,7 +151,7 @@ export default class App extends React.Component<any, any> {
       info: movie.overview,
       releaseDate,
       posterPath: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
-      cutInfo: this.cutInfo(movie.overview),
+      cutInfo: cutInfo(movie.overview),
       genreIds: Array.from(movie.genre_ids),
       rating: [false, 0],
       averageRating: movie.vote_average,

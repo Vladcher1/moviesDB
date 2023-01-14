@@ -1,7 +1,7 @@
 import React from "react";
 import "./movie-item.css";
 
-import { IMovie } from "../../models";
+import { IMovie } from "../../types";
 import { MovieContextConsumer } from "../../servises/data-context";
 import RateStars from "../rate-stars/rate-stars";
 import MovieDB from "../../servises/data";

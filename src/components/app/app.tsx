@@ -1,7 +1,7 @@
 import React from "react";
 import { format } from "date-fns";
 
-import { IMovie, IState, IMovieFromServer } from "../../models";
+import { IMovie, IState, IMovieFromServer } from "../../types";
 import "./app.css";
 import MovieList from "../movie-list/movie-list";
 import MovieDB from "../../servises/data";

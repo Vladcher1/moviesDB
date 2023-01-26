@@ -4,7 +4,7 @@ import { Rate } from "antd";
 import "./rate-stars.css";
 import MovieDB from "../../servises/data";
 
-const RateStars = ({ id, rating }: any): any => {
+function RateStars({ id, rating }: any): any {
   const movieServise = new MovieDB();
   return (
     <Rate
@@ -14,5 +14,5 @@ const RateStars = ({ id, rating }: any): any => {
       defaultValue={Number(rating[1])}
     />
   );
-};
+}
 export default RateStars;

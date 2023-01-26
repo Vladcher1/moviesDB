@@ -35,3 +35,8 @@ body {
   margin: 0 auto;
   background-color: #ffffff;
 }
+
+.ant-pagination {
+  margin: 0 auto;
+  width: max-content;
+}

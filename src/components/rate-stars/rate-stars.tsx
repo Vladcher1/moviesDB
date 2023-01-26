@@ -1,16 +1,17 @@
 import React from "react";
 import { Rate } from "antd";
-import "./rate-stars.css";
 
-const RateStars = ({ getRatingValue, id }: any): any => {
-  const storageValue = localStorage.getItem(`${id}`);
-  const showRatingValue = storageValue || 0;
+import "./rate-stars.css";
+import MovieDB from "../../servises/data";
+
+const RateStars = ({ id, rating }: any): any => {
+  const movieServise = new MovieDB();
   return (
     <Rate
       count={10}
-      onChange={(value) => getRatingValue(value)}
+      onChange={(value) => movieServise.rate(id, value)}
       allowHalf
-      defaultValue={Number(showRatingValue)}
+      defaultValue={Number(rating[1])}
     />
   );
 };

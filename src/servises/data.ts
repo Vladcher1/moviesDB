@@ -18,7 +18,8 @@ export default class MovieDB {
       `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&sort_by=created_at.asc`
     );
     const rated = await ratedRequest.json();
-    return rated.results;
+    // console.log(rated, "rated");
+    return rated;
   }
 
   async rate(id: number, valueRate: number) {

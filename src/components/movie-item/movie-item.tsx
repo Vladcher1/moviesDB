@@ -4,7 +4,6 @@ import "./movie-item.css";
 import { IMovie } from "../../types";
 import { MovieContextConsumer } from "../../servises/data-context";
 import RateStars from "../rate-stars/rate-stars";
-import MovieDB from "../../servises/data";
 
 const MovieItem = function movieItem({
   id,
@@ -14,26 +13,23 @@ const MovieItem = function movieItem({
   cutInfo,
   averageRating,
   genreIds,
+  rating,
 }: IMovie) {
-  let classNames = "movie-card__average-rating";
-  if (averageRating <= 3) {
-    classNames += " red-rating";
-  }
-  if (averageRating <= 5 && averageRating > 3) {
-    classNames += " orange-rating";
-  }
-  if (averageRating <= 7 && averageRating > 5) {
-    classNames += " yellow-rating";
-  }
-  if (averageRating > 7) {
-    classNames += " green-rating";
-  }
-
-  const movieServise = new MovieDB();
-
-  const getRatingValue = (value: number) => {
-    movieServise.rate(id || 0, value);
-    localStorage.setItem(`${id}`, `${value}`);
+  const classNamesMovieCard = () => {
+    let classNames = "movie-card__average-rating";
+    if (averageRating <= 3) {
+      classNames += " red-rating";
+    }
+    if (averageRating <= 5 && averageRating > 3) {
+      classNames += " orange-rating";
+    }
+    if (averageRating <= 7 && averageRating > 5) {
+      classNames += " yellow-rating";
+    }
+    if (averageRating > 7) {
+      classNames += " green-rating";
+    }
+    return classNames;
   };
 
   return (
@@ -50,11 +46,10 @@ const MovieItem = function movieItem({
               );
             }
           }
-          return "";
         });
 
         return (
-          <div className="movie-container__movie-card movie-card" key={id}>
+          <article className="movie-container__movie-card movie-card" key={id}>
             <div className="movie-card__image">
               <img className="movie-card__image" src={posterPath} alt={title} />
             </div>
@@ -62,7 +57,7 @@ const MovieItem = function movieItem({
             <div className="movie-card__body">
               <div className="movie-card__header">
                 <h5 className="movie-card__title">{title}</h5>
-                <div className={classNames}>
+                <div className={String(classNamesMovieCard())}>
                   <span>{averageRating.toFixed(1)}</span>
                 </div>
               </div>
@@ -71,9 +66,9 @@ const MovieItem = function movieItem({
               <div className="movie-card__categories">{genreSpans}</div>
 
               <p className="movie-card__info">{cutInfo}</p>
-              <RateStars getRatingValue={getRatingValue} id={id} />
+              <RateStars rating={rating} id={id} />
             </div>
-          </div>
+          </article>
         );
       }}
     </MovieContextConsumer>

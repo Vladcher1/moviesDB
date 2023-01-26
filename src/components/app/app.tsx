@@ -1,5 +1,6 @@
 import React from "react";
 import { format } from "date-fns";
+import { Pagination } from "antd";
 
 import { IMovie, IState, IMovieFromServer } from "../../types";
 import "./app.css";
@@ -7,11 +8,9 @@ import MovieList from "../movie-list/movie-list";
 import MovieDB from "../../servises/data";
 import Spinner from "../spinner/spinner";
 import ErrorMessage from "../error/error-message";
-import Pagination from "../pagination/pagination";
 import SearchInput from "../search-input/search-input";
 import Header from "../header/header";
 import { MovieContextProvider } from "../../servises/data-context";
-import Rated from "../rated/rated";
 import { cutInfo } from "../../utilities";
 
 export default class App extends React.Component<any, any> {
@@ -35,6 +34,10 @@ export default class App extends React.Component<any, any> {
   componentDidMount() {
     this.movieServise.getGenres().then((genres) => {
       this.genresArray = genres;
+    });
+
+    this.movieServise.getRated().then((rated) => {
+      this.ratedInState(rated);
     });
 
     window.onoffline = () => {
@@ -122,26 +125,30 @@ export default class App extends React.Component<any, any> {
 
   toggleSearch = (button: string) => {
     if (button !== "search") {
-      this.movieServise.getRated().then((rated: IMovie[]) => {
-        this.ratedInState(rated);
-      });
-
       this.setState({
+        loading: false,
         isSearch: false,
       });
     } else {
       this.setState({
+        loading: true,
+      });
+      this.setState({
+        loading: false,
         isSearch: true,
       });
     }
   };
 
-  ratedInState = (newData: IMovie[]) => {
-    const ratedList = newData.map((movieRated: any) =>
+  ratedInState = ({ results, total_pages: totalPages }: any) => {
+    const ratedList = results.map((movieRated: any) =>
       this.createMovie(movieRated)
     );
+    console.log();
     this.setState({
+      loading: false,
       ratedMovies: ratedList,
+      totalPages,
     });
   };
 
@@ -153,9 +160,38 @@ export default class App extends React.Component<any, any> {
     poster_path: posterPath,
     genre_ids: genreIds,
     vote_average: averageRating,
+    rating,
   }: IMovieFromServer) {
     if (releaseDate !== "") {
       format(new Date(releaseDate), "MMMM dd, yyyy");
+    }
+    if (rating === undefined) {
+      const { ratedMovies } = this.state;
+      const currentMovie = ratedMovies.find((movie) => movie.id === id);
+      if (currentMovie !== undefined) {
+        return {
+          id,
+          title,
+          info: overview,
+          releaseDate,
+          posterPath: `https://image.tmdb.org/t/p/w500${posterPath}`,
+          cutInfo: cutInfo(overview),
+          genreIds: Array.from(genreIds),
+          rating: [false, currentMovie.rating[1]],
+          averageRating,
+        };
+      }
+      return {
+        id,
+        title,
+        info: overview,
+        releaseDate,
+        posterPath: `https://image.tmdb.org/t/p/w500${posterPath}`,
+        cutInfo: cutInfo(overview),
+        genreIds: Array.from(genreIds),
+        rating: [false, 0],
+        averageRating,
+      };
     }
     return {
       id,
@@ -165,7 +201,7 @@ export default class App extends React.Component<any, any> {
       posterPath: `https://image.tmdb.org/t/p/w500${posterPath}`,
       cutInfo: cutInfo(overview),
       genreIds: Array.from(genreIds),
-      rating: [false, 0],
+      rating: [false, rating],
       averageRating,
     };
   }
@@ -194,7 +230,7 @@ export default class App extends React.Component<any, any> {
         <span>Sorry, no films &quot;{value}&quot; are found :(</span>
       </div>
     );
-    const rated = !isSearch && <Rated ratedMovies={ratedMovies} />;
+    const rated = !isSearch && <MovieList data={ratedMovies} />;
     return (
       <div className="body-container">
         <MovieContextProvider value={this.genresArray}>
@@ -204,15 +240,16 @@ export default class App extends React.Component<any, any> {
           {rated}
           {!error && isSearch && <SearchInput getValue={this.getValue} />}
           {noNetwork}
+          {spinner}
           {movieList}
           {notFoundMovies}
-          {spinner}
           {errorMessage}
-          {hasData && !notFound && !rated && (
+          {hasData && !notFound && (
             <Pagination
-              page={page}
-              nextPage={this.nextPage}
-              totalPages={totalPages}
+              defaultCurrent={1}
+              current={page}
+              onChange={(pageCurrent) => this.nextPage(pageCurrent)}
+              total={totalPages}
             />
           )}
         </MovieContextProvider>

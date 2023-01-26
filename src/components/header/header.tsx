@@ -10,7 +10,7 @@ function Header({ toggleSearch, isSearch }: any) {
   }
 
   return (
-    <div className="header">
+    <header className="header">
       <button
         type="button"
         className={classNamesSearch}
@@ -25,7 +25,7 @@ function Header({ toggleSearch, isSearch }: any) {
       >
         Rated
       </button>
-    </div>
+    </header>
   );
 }
 

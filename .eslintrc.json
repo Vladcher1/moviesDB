@@ -24,6 +24,13 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier", "import"],
   "rules": {
+    "consistent-return": "off",
+    "array-callback-return": "off",
+    "no-restricted-syntax": "off",
+    "react/jsx-wrap-multilines": "off",
+    " no-restricted-syntax": "off",
+    "react/jsx-props-no-spreading": "off",
+    "import/prefer-default-export": "off",
     "function-paren-newline": "off",
     "implicit-arrow-linebreak": "off",
     "class-methods-use-this": "off",

@@ -2,7 +2,7 @@ import React from "react";
 import { format } from "date-fns";
 import { Pagination } from "antd";
 
-import { IMovie, IState, IMovieFromServer } from "../../types";
+import { IState, IMovieFromServer } from "../../types";
 import "./app.css";
 import MovieList from "../movie-list/movie-list";
 import MovieDB from "../../servises/data";
@@ -92,6 +92,7 @@ export default class App extends React.Component<any, any> {
             const moviesArr = results.map((movie: any) =>
               this.createMovie(movie)
             );
+
             this.setState({
               data: moviesArr,
               loading: false,
@@ -144,7 +145,7 @@ export default class App extends React.Component<any, any> {
     const ratedList = results.map((movieRated: any) =>
       this.createMovie(movieRated)
     );
-    console.log();
+
     this.setState({
       loading: false,
       ratedMovies: ratedList,
@@ -167,7 +168,7 @@ export default class App extends React.Component<any, any> {
     }
     if (rating === undefined) {
       const { ratedMovies } = this.state;
-      const currentMovie = ratedMovies.find((movie) => movie.id === id);
+      const currentMovie = ratedMovies.find((movie: any) => movie.id === id);
       if (currentMovie !== undefined) {
         return {
           id,

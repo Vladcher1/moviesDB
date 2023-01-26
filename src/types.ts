@@ -1,4 +1,5 @@
 export interface IMovie {
+  rating: any;
   id?: number;
   title?: string;
   info?: string;

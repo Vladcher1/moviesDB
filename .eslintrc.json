@@ -24,6 +24,8 @@
   },
   "plugins": ["react", "@typescript-eslint", "prettier", "import"],
   "rules": {
+    "function-paren-newline": "off",
+    "implicit-arrow-linebreak": "off",
     "class-methods-use-this": "off",
     "operator-linebreak": ["error", "after"],
     "no-plusplus": "off",

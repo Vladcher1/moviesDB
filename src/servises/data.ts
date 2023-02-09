@@ -13,9 +13,9 @@ export default class MovieDB {
     return createSession;
   }
 
-  async getRated() {
+  async getRated(page = 1) {
     const ratedRequest = await fetch(
-      `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&sort_by=created_at.asc`
+      `https://api.themoviedb.org/3/guest_session/${guestSessionId}/rated/movies?api_key=${apiKey}&language=en-US&sort_by=created_at.asc&page=${page}`
     );
     const rated = await ratedRequest.json();
     // console.log(rated, "rated");

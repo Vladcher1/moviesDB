@@ -29,6 +29,8 @@ export default class App extends React.Component<any, any> {
     notFound: false,
     totalPages: 0,
     isSearch: true,
+    totalPagesRated: 0,
+    currentRatedPage: 1,
   };
 
   componentDidMount() {
@@ -36,7 +38,7 @@ export default class App extends React.Component<any, any> {
       this.genresArray = genres;
     });
 
-    this.movieServise.getRated().then((rated) => {
+    this.movieServise.getRated(1).then((rated) => {
       this.ratedInState(rated);
     });
 
@@ -57,10 +59,21 @@ export default class App extends React.Component<any, any> {
   }
 
   componentDidUpdate(prevProps: any, prevState: Readonly<any>): void {
-    const { value, page } = this.state;
-    if (value === "") {
+    const { value, page, isSearch, currentRatedPage } = this.state;
+    if (value === "" && isSearch) {
       return;
     }
+    if (currentRatedPage !== prevState.currentRatedPage) {
+      this.setState({
+        error: false,
+        ratedMovies: [],
+        loading: true,
+      });
+      this.movieServise.getRated(currentRatedPage).then((rated) => {
+        this.ratedInState(rated);
+      });
+    }
+
     if (value !== prevState.value || page !== prevState.page) {
       window.onoffline = () => {
         this.setState(({ network }: Pick<IState, "network">) => ({
@@ -76,33 +89,36 @@ export default class App extends React.Component<any, any> {
           notFound: false,
         }));
       };
+      if (isSearch) {
+        this.setState({ loading: true, notFound: false });
+        this.movieServise
+          .getResourse(value, page)
+          .then(({ results, total_pages: totalPages }: any) => {
+            if (results.length === 0) {
+              this.setState({
+                notFound: true,
+                loading: false,
+                error: false,
+                data: [],
+              });
+            } else {
+              const moviesArr = results.map((movie: any) =>
+                this.createMovie(movie)
+              );
 
-      this.setState({ loading: true, notFound: false });
-      this.movieServise
-        .getResourse(value, page)
-        .then(({ results, total_pages: totalPages }: any) => {
-          if (results.length === 0) {
-            this.setState({
-              notFound: true,
-              loading: false,
-              error: false,
-              data: [],
-            });
-          } else {
-            const moviesArr = results.map((movie: any) =>
-              this.createMovie(movie)
-            );
-
-            this.setState({
-              data: moviesArr,
-              loading: false,
-              error: false,
-              notFound: false,
-              totalPages,
-            });
-          }
-        })
-        .catch(() => this.onError());
+              this.setState({
+                data: moviesArr,
+                loading: false,
+                error: false,
+                notFound: false,
+                totalPages,
+              });
+            }
+          })
+          .catch(() => {
+            this.onError();
+          });
+      }
     }
   }
 
@@ -119,21 +135,28 @@ export default class App extends React.Component<any, any> {
   };
 
   nextPage = (page: number) => {
-    this.setState({
-      page,
-    });
+    const { isSearch } = this.state;
+    if (!isSearch) {
+      this.setState({
+        currentRatedPage: page,
+        loading: true,
+      });
+    } else {
+      this.setState({
+        page,
+      });
+    }
   };
 
   toggleSearch = (button: string) => {
     if (button !== "search") {
       this.setState({
-        loading: false,
+        loading: true,
         isSearch: false,
+        data: [],
+        value: "",
       });
     } else {
-      this.setState({
-        loading: true,
-      });
       this.setState({
         loading: false,
         isSearch: true,
@@ -141,7 +164,7 @@ export default class App extends React.Component<any, any> {
     }
   };
 
-  ratedInState = ({ results, total_pages: totalPages }: any) => {
+  ratedInState = ({ results, page, total_results: totalResults }: any) => {
     const ratedList = results.map((movieRated: any) =>
       this.createMovie(movieRated)
     );
@@ -149,7 +172,8 @@ export default class App extends React.Component<any, any> {
     this.setState({
       loading: false,
       ratedMovies: ratedList,
-      totalPages,
+      totalPagesRated: totalResults,
+      page,
     });
   };
 
@@ -219,6 +243,8 @@ export default class App extends React.Component<any, any> {
       totalPages,
       isSearch,
       ratedMovies,
+      totalPagesRated,
+      currentRatedPage,
     } = this.state;
 
     const hasData = !loading && !error && value !== "";
@@ -251,6 +277,15 @@ export default class App extends React.Component<any, any> {
               current={page}
               onChange={(pageCurrent) => this.nextPage(pageCurrent)}
               total={totalPages}
+            />
+          )}
+          {rated && !loading && (
+            <Pagination
+              defaultCurrent={1}
+              current={currentRatedPage}
+              onChange={(pageCurrent) => this.nextPage(pageCurrent)}
+              total={totalPagesRated}
+              defaultPageSize={20}
             />
           )}
         </MovieContextProvider>

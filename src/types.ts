@@ -20,6 +20,8 @@ export interface IState {
   totalPages: number;
   isSearch: boolean;
   ratedMovies: IMovie[];
+  totalPagesRated: number;
+  currentRatedPage: number;
 }
 
 export interface IMovieFromServer {
